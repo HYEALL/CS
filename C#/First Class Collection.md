@@ -1,4 +1,4 @@
-\## Collection
+## Collection
 
 
 
@@ -14,65 +14,51 @@ ex. List, Set, Map
 
 
 
-\## First-Class Collection
+## First-Class Collection
 
 
 
 일급 컬렉션은 List<T> 같은 컬렉션을 노출시키지 않고 컬렉션을 감싼 클래스를 만드는 것
 
 
-
->// 일급 컬렉션
-
+```
+// 일급 컬렉션
 public class Orders {
 
+    private final List<Order> orders;
+
+    public Orders(List<Order> orders) {
+        validate(orders); // 검증 수행
+        ...
+    }
 
 
-&nbsp;   private final List<Order> orders;
+    public void add(Order order) {
+        if (order == null) {
+            throw new IllegalArgumentException("Order cannot be null");
+        }
 
+        orders.add(order);
 
+    }
 
-&nbsp;   public Orders(List<Order> orders) {
+    public List<Order> getAll() {
 
-&nbsp;       validate(orders); // 검증 수행
+        return Collections.unmodifiableList(orders);
 
-&nbsp;       ...
+    }
 
-&nbsp;   }
+    public double getTotalAmount() {
 
+        return orders.stream()
 
+                     .mapToDouble(Order::getAmount)
 
-&nbsp;   public void add(Order order) {
+                     .sum();
 
-&nbsp;       if (order == null) {
-
-&nbsp;           throw new IllegalArgumentException("Order cannot be null");
-
-&nbsp;       }
-
-&nbsp;       orders.add(order);
-
-&nbsp;   }
-
-
-
-&nbsp;   public List<Order> getAll() {
-
-&nbsp;       return Collections.unmodifiableList(orders);
-
-&nbsp;   }
-
-
-
-&nbsp;   public double getTotalAmount() {
-
-&nbsp;       return orders.stream()
-
-&nbsp;                    .mapToDouble(Order::getAmount)
-
-&nbsp;                    .sum();
-
-&nbsp;   }
+    }
 
 }
+
+```
 
